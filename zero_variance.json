@@ -1,0 +1,10 @@
+{
+  "match_id": "M2",
+  "innings_id": "I1",
+  "player_id": "P11",
+  "player_name": "Perfect Stable Player",
+  "batting": [10, 10, 10],
+  "bowling": [5, 5, 5],
+  "fielding": [7, 7, 7],
+  "ball_events": []
+}
