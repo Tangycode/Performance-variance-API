@@ -1,40 +1,36 @@
-def calculate_variance(data):
-    b = data.batting_scores
-    bo = data.bowling_scores
-    f = data.fielding_scores
+import statistics
 
-    if not (len(b) == len(bo) == len(f)):
-        raise ValueError("All input lists must have the same length")
 
-    def variance(arr):
-        n = len(arr)
-        mean = sum(arr) / n
-        return sum((x - mean) ** 2 for x in arr) / n
+def compute_mean(values):
+    return sum(values) / len(values)
 
-    var_batting = variance(b)
-    var_bowling = variance(bo)
-    var_fielding = variance(f)
 
-    overall_variance = (var_batting + var_bowling + var_fielding) / 3
+def compute_variance(values):
+    mean = compute_mean(values)
+    return sum((x - mean) ** 2 for x in values) / len(values)
 
+
+def compute_overall_variance(b, bo, f):
+    vb = compute_variance(b)
+    vbo = compute_variance(bo)
+    vf = compute_variance(f)
+
+    return (vb + vbo + vf) / 3
+
+
+def stability_index(overall_variance):
     if overall_variance == 0:
-        stability_index = float('inf')
-    else:
-        stability_index = 1 / overall_variance
+        return 100, "perfectly stable in supplied sample"
 
-    if overall_variance < 0.01:
-        interpretation = "Highly Stable"
-    elif overall_variance < 0.05:
-        interpretation = "Moderately Stable"
-    else:
-        interpretation = "Unstable"
+    return 1 / overall_variance, None
 
-    return {
-        "success": True,
-        "batting_variance": round(var_batting, 4),
-        "bowling_variance": round(var_bowling, 4),
-        "fielding_variance": round(var_fielding, 4),
-        "overall_variance": round(overall_variance, 4),
-        "stability_index": round(stability_index, 2) if stability_index != float('inf') else stability_index,
-        "interpretation": interpretation
-    }
+
+def interpret_stability(index):
+    if index >= 10:
+        return "Highly Stable"
+    elif index >= 5:
+        return "Stable"
+    elif index >= 1:
+        return "Volatile"
+    else:
+        return "Highly Volatile"
